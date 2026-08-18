@@ -9,7 +9,7 @@ app.get('/phone', async (req, res) => {
     if (!num) return res.status(400).json({ error: "Number required" });
 
     try {
-        const response = await fetch(`https://number-info-api-2.vercel.app/number?num=${num}`);
+        const response = await fetch(`https://api.numlookupapi.com/v1/validate/{number}?apikey=num_live_RFaZyF0JYEjKrcJWz217GmK8jFcMfVs2wYjQPFsI`);
         const data = await response.json();
         res.json(data);
     } catch (err) {
