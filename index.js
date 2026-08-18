@@ -14,25 +14,29 @@ app.get('/phone', async (req, res) => {
         const response = await fetch(apiUrl);
         const data = await response.json();
 
-        // 1. Unwanted fields (LIMIT, KEY OWNER, REMAINING, etc.) ko hata kar clean object banayein
-        const cleanedData = {
-            CREDIT: data.CREDIT,
-            STATUS: data.STATUS,
-            COUNT: data.COUNT,
-            QUERY: data.QUERY,
-            MOBILE: data.MOBILE,
-            NAME: data.NAME,
-            FATHERNAME: data.FNAME,
-            ADDRESS: data.ADDRESS,
-            ALT: data.ALT,
-            CIRCLE: data.CIRCLE,
-            ID: data.ID,
-            EMAIL: data.EMAIL,
-            "POWERED BY": "!5h44N" // Aapka custom credit name
-        };
+        // Safe cleanup: Jo keys nahi chahiye bas unko delete kar rahe hain
+        delete data.LIMIT;
+        delete data.limit;
+        delete data["KEY OWNER"];
+        delete data.key_owner;
+        delete data.REMAINING;
+        delete data.remaining;
+        delete data.DAILYREMAINING;
+        delete data.dailyremaining;
+        delete data.USED;
+        delete data.used;
+        delete data.PERSECONDLIMIT;
+        delete data.persecondlimit;
+        delete data.CREATED;
+        delete data.created;
+        delete data.EXPIRY;
+        delete data.expiry;
 
-        // 2. Sirf filtered data frontend ko bhejें
-        res.json(cleanedData);
+        // Custom branding update
+        if (data["POWERED BY"]) data["POWERED BY"] = "!5h44N";
+        if (data.powered_by) data.powered_by = "!5h44N";
+
+        res.json(data);
 
     } catch (err) {
         res.status(500).json({ error: "API Unreachable" });
