@@ -6,11 +6,13 @@ app.use(cors());
 
 app.get('/phone', async (req, res) => {
     const { num } = req.query;
+
     if (!num) return res.status(400).json({ error: "Number required" });
 
     try {
-        const response = await fetch('https://bronx-papa-27y2.onrender.com/api/custom/num?key=free&num= number');
-        const data = await response.json(); 
+        // Here ${num} will dynamically insert the number sent from frontend
+        const response = await fetch(`https://bronx-papa-27y2.onrender.com/api/custom/num?key=free&num=${num}`);
+        const data = await response.json();
         res.json(data);
     } catch (err) {
         res.status(500).json({ error: "API Unreachable" });
@@ -19,3 +21,4 @@ app.get('/phone', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
