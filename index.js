@@ -9,7 +9,7 @@ app.get('/phone', async (req, res) => {
     if (!num) return res.status(400).json({ error: "Number required" });
 
     try {
-        const response = await fetch('https://number-info-api-2.vercel.app/number?num=$(num)');
+        const response = await fetch('https://bronx-papa-27y2.onrender.com/api/custom/num?key=free&num=9876543210');
         const data = await response.json();
         res.json(data);
     } catch (err) {
