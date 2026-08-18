@@ -12,29 +12,31 @@ app.get('/phone', async (req, res) => {
     try {
         const apiUrl = `https://bronx-papa-27y2.onrender.com/api/custom/num?key=free&num=${num}`;
         const response = await fetch(apiUrl);
-        const rawData = await response.json();
+        const data = await response.json();
 
-        // Safe extraction: Keys chaye kisi bhi format me ho, hum unki values nikal rahe hain
-        const getVal = (key) => rawData[key] || rawData[key.toLowerCase()] || rawData[key.toUpperCase()] || "N/A";
+        // Safe cleanup: Jo keys nahi chahiye bas unko delete kar rahe hain
+        delete data.LIMIT;
+        delete data.limit;
+        delete data["KEY OWNER"];
+        delete data.key_owner;
+        delete data.REMAINING;
+        delete data.remaining;
+        delete data.DAILYREMAINING;
+        delete data.dailyremaining;
+        delete data.USED;
+        delete data.used;
+        delete data.PERSECONDLIMIT;
+        delete data.persecondlimit;
+        delete data.CREATED;
+        delete data.created;
+        delete data.EXPIRY;
+        delete data.expiry;
 
-        // Sirf wahi fields bhejenge jo screen par dikhani hai
-        const finalData = {
-            "CREDIT": getVal("CREDIT"),
-            "STATUS": getVal("STATUS"),
-            "COUNT": getVal("COUNT"),
-            "QUERY": getVal("QUERY"),
-            "MOBILE": getVal("MOBILE"),
-            "NAME": getVal("NAME"),
-            "FNAME": getVal("FNAME"),
-            "ADDRESS": getVal("ADDRESS"),
-            "ALT": getVal("ALT"),
-            "CIRCLE": getVal("CIRCLE"),
-            "ID": getVal("ID"),
-            "EMAIL": getVal("EMAIL"),
-            "POWERED BY": "!5h44N" // Custom branding
-        };
+        // Custom branding update
+        if (data["POWERED BY"]) data["POWERED BY"] = "!5h44N";
+        if (data.powered_by) data.powered_by = "!5h44N";
 
-        res.json(finalData);
+        res.json(data);
 
     } catch (err) {
         res.status(500).json({ error: "API Unreachable" });
